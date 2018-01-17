@@ -11,7 +11,7 @@ const Transactions = require("./src/model/transaction");
 //const Products = require("./src/model/product");
 const config = require("./src/config");
 const UserAccounts = require("./src/model/user_accounts");
-
+const JWT_SECRET = "8layerDEV";
 
 db.connect(config.database, function(err) {
   if (err) {
@@ -29,7 +29,7 @@ app.use(morgan('dev'));
 
 const result = { status: "failed" };
 // Register
-api.post("/insert", function(request, response) {
+api.post("/insert",verifyToken ,function(request, response) {
   console.log(request.body); // your JSON
   const {
     TransacID,
@@ -57,7 +57,7 @@ api.post("/insert", function(request, response) {
   })
 });
 // Read
-api.post("/read", function(request, response) {
+api.post("/read",verifyToken ,function(request, response) {
   Transactions.find({},function(err,data){
     if (err){
       response.send(result);
@@ -85,7 +85,6 @@ api.post('/authenticate',function(request,response){
         let token = jwt.sign(payload, app.get('secret'), {
           expiresIn: 60*60*24 // expires in 24 hours
         });
-
         response.json({
           success: true,
           message: 'Enjoy your token!',
@@ -95,8 +94,29 @@ api.post('/authenticate',function(request,response){
     }
   })
 });
+const verifyToken = function(request,response,next){
+  var token = request.body.token || request.query.token || request.headers["x-access-token"];
+  if (token){
+    jwt.verify(token, JWT_SECRET, function(err, decoded){
+      if (err){
+        return response.json({
+          success: false,
+          message: "Failed to authenticate token"
+        });
+      } else {
+        request.decoded = decoded;
+        next();
+      }
+    });
+  } else {
+    return response.status(403).send({
+      success: false,
+      message: "No token provided"
+    });
+  }
+};
 
-api.post("/addUser",function(request,response){
+api.post("/addUser",verifyToken,function(request,response){
   console.log(request.body);
   const {
     transacID,
