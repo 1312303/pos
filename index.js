@@ -7,7 +7,7 @@ const Transactions = require("./src/model/transaction");
 //const Products = require("./src/model/product");
 const UserAccounts = require("./src/model/user_accounts");
 const api = express.Router();
-//const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 db.connect("mongodb://localhost:27017/db_pos", function(err) {
   if (err) {
