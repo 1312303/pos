@@ -2,14 +2,15 @@ const db = require("mongoose");
 
 
 let UserAccountsSchema = db.Schema({
-    TransacID: {type: String, required: true, unique: true},
-    UserID: {type: String, required: true,unique: true},
-    FirstName: {type: String, required: true},
-    MiddleName: {type: String},
-    LastName: {type: String, required: true},
-    Username: {type: String, required: true},
-    Password: {type: Number, required: true},
+    transacID: {type: String, required: true, unique: true},
+    userID: {type: String, required: true,unique: true},
+    firstName: {type: String, required: true},
+    middleName: {type: String},
+    lastName: {type: String, required: true},
+    username: {type: String, required: true},
+    password: {type: String, required: true},
+    userType: {type: String, required: true}
 });
 
-let UserAccount = db.model("Products",UserAccountsSchema);
+let UserAccount = db.model("userAccounts",UserAccountsSchema);
 module.exports = UserAccount;
