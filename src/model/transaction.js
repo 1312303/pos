@@ -12,5 +12,5 @@ let TransactionSchema = db.Schema({
     Subtotal: {type: Number, required: true }
 });
 
-let Transaction = db.model("Transactions",TransactionSchema);
+let Transaction = db.model("transactions",TransactionSchema);
 module.exports = Transaction;

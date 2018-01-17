@@ -4,9 +4,10 @@ const express = require("express");
 const db = require("mongoose");
 const app = express();
 const Transactions = require("./src/model/transaction");
-const Products = require("./src/model/product");
+//const Products = require("./src/model/product");
 const UserAccounts = require("./src/model/user_accounts");
-const jwt = require("jsonwebtoken");
+const api = express.Router();
+//const jwt = require("jsonwebtoken");
 
 db.connect("mongodb://localhost:27017/db_pos", function(err) {
   if (err) {
@@ -20,7 +21,7 @@ db.connect("mongodb://localhost:27017/db_pos", function(err) {
 app.use(bodyParser.json());
 const result = { status: "failed" };
 // Register
-app.post("/register", function(request, response) {
+api.post("/register", function(request, response) {
   console.log(request.body); // your JSON
   const {
     TransacID,
@@ -48,13 +49,16 @@ app.post("/register", function(request, response) {
   })
 });
 // Read
-app.post("/read", function(request, response) {
-    
-});
-Transactions.find(function(err,data){
-    if (data){
-       console.log(data);
+api.post("/read", function(request, response) {
+  Transactions.find({},function(err,data){
+    if (err){
+      response.send(result);
     }
-    console.log(result);
+    else {
+      response.json(data);
+    }
+  });
 });
+
+app.use('/api',api);
 app.listen(3000);
