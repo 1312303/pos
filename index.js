@@ -5,6 +5,9 @@ const db = require("mongoose");
 const app = express();
 const Transactions = require("./src/model/transaction");
 const Products = require("./src/model/product");
+const UserAccounts = require("./src/model/user_accounts");
+const jwt = require("jsonwebtoken");
+
 db.connect("mongodb://localhost:27017/db_pos", function(err) {
   if (err) {
     console.log(err);
